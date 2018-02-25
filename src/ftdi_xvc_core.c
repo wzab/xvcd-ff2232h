@@ -114,6 +114,7 @@ int ftdi_xvc_shift_command(unsigned int len,
   int i;
   int nr_bytes;
   int cur_byte_pos=0;
+  int bit_pos = 0;
   int left;
   nr_bytes = (len+7)/8;
   left = len;
@@ -205,7 +206,6 @@ int ftdi_xvc_shift_command(unsigned int len,
     ftdi_xvc_read_bytes(rd_len, ftdi_res);
     //Unpack the response basing on the read descriptors
     //Please note, that the responses do not always come as full bits!
-    int bit_pos = 0;
     int rd_byte_pos = 0;
     for(i=0;i<desc_pos;i++) {
       int j;
@@ -238,12 +238,12 @@ int ftdi_xvc_shift_command(unsigned int len,
 	break;
       }
     }
-    fprintf(stderr,"rd_len=%d rd_byte_pos=%d\n",rd_len,rd_byte_pos);
+  }
+    fprintf(stderr,"rd_len=%d rd_byte_pos=%d\n",nr_bytes,nr_bytes);
     { int i;
-      for(i=0;i<rd_len;i++)
+      for(i=0;i<nr_bytes;i++)
 	fprintf(stderr,"%2.2x,",(int)result[i]);
       fprintf(stderr,"\n");	
     }
-  }
   return 0;
 }
