@@ -4,6 +4,9 @@
  * by Avnet and is used by Xilinx for XAPP1251.
  *
  *  Description : XAPP1251 Xilinx Virtual Cable Server for Linux
+ *
+ * Support for FT2232H has been added by Wojciech M. Zabolotny (wzab@ise.pw.edu.pl) basing on the 
+ * https://github.com/barawn/xvcd-anita project.
  */
 
 
