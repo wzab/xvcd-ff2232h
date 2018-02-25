@@ -136,5 +136,11 @@ int ftdi_xvc_shift_command(unsigned int len,
      left -= to_send;
      pos += to_send;
    }     
+    fprintf(stderr,"rd_len=%d rd_byte_pos=%d\n",nr_bytes,nr_bytes);
+    { int i;
+      for(i=0;i<nr_bytes;i++)
+	fprintf(stderr,"%2.2x,",(int)result[i]);
+      fprintf(stderr,"\n");	
+    }
    return 0;
 }
