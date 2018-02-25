@@ -112,9 +112,8 @@ int ftdi_xvc_shift_command(unsigned int len,
 			   unsigned char *result) 
 {
   int i;
-  int to_send;
   int nr_bytes;
-  int cur_byte_pos;
+  int cur_byte_pos=0;
   int left;
   nr_bytes = (len+7)/8;
   left = len;
@@ -159,7 +158,7 @@ int ftdi_xvc_shift_command(unsigned int len,
 	  ftdi_desc[desc_pos].oper = 0;
 	  ftdi_desc[desc_pos++].len = cur_len;
 	}
-	if ((buffer[cur_byte_pos] == 0) & (left<=7)) { //No TMS, bit shift of last bits
+	if ((buffer[cur_byte_pos] == 0) && (left<=7)) { //No TMS, bit shift of last bits
 	  ftdi_cmd[wr_ptr++] = MPSSE_DO_WRITE|MPSSE_DO_READ|MPSSE_LSB|MPSSE_BITMODE|MPSSE_WRITE_NEG;
 	  ftdi_cmd[wr_ptr++] = left-1;
 	  ftdi_cmd[wr_ptr++] = buffer[cur_byte_pos+nr_bytes];
@@ -233,7 +232,7 @@ int ftdi_xvc_shift_command(unsigned int len,
 	}
 	break;
       case 2://TMS shift
-	result[bit_pos/8] |= (ftdi_res[i] & 0x80) ? 1<<(bit_pos&7) : 0;
+	result[bit_pos/8] |= (ftdi_res[rd_byte_pos] & 0x80) ? 1<<(bit_pos&7) : 0;
 	bit_pos++;
 	rd_byte_pos++;
 	break;
