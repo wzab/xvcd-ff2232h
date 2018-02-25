@@ -104,7 +104,7 @@ typedef struct
   int len; //length of the operation
 } data_desc;
 
-#define MAX_DATA 2048
+#define MAX_DATA 4096
 /* WZab - simplified command for shifting */
 /** \brief Handle a 'shift:' command sent via XVC. */
 int ftdi_xvc_shift_command(unsigned int len,
@@ -239,11 +239,5 @@ int ftdi_xvc_shift_command(unsigned int len,
       }
     }
   }
-    fprintf(stderr,"rd_len=%d rd_byte_pos=%d\n",nr_bytes,nr_bytes);
-    { int i;
-      for(i=0;i<nr_bytes;i++)
-	fprintf(stderr,"%2.2x,",(int)result[i]);
-      fprintf(stderr,"\n");	
-    }
   return 0;
 }
