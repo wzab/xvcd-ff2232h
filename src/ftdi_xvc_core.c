@@ -215,7 +215,7 @@ int ftdi_xvc_shift_command(unsigned int len,
 	for(j=0;j<=ftdi_desc[i].len;j++) {
 	  int bnr;
 	  for(bnr=0;bnr<8;bnr++) {
-	    result[bit_pos/8] |= (ftdi_res[rd_byte_pos] & (1<<bnr)) ? 1<<(bit_pos & 7) : 0;
+	    result[bit_pos/8] |= (ftdi_res[rd_byte_pos] & (1<<bnr)) ? (1<<(bit_pos & 7)) : 0;
 	    bit_pos++;
 	  }
 	  rd_byte_pos++;
@@ -225,18 +225,24 @@ int ftdi_xvc_shift_command(unsigned int len,
 	{
 	  int bnr; //Please note, that the received bits are shifted from the MSB!
 	  for(bnr=7-ftdi_desc[i].len;bnr<8;bnr++) {
-	    result[bit_pos/8] |= (ftdi_res[rd_byte_pos] & (1<<bnr)) ? 1<<(bit_pos & 7) : 0;
+	    result[bit_pos/8] |= (ftdi_res[rd_byte_pos] & (1<<bnr)) ? (1<<(bit_pos & 7)) : 0;
 	    bit_pos++;
 	  }
 	  rd_byte_pos++;
 	}
 	break;
       case 2://TMS shift
-	result[bit_pos/8] |= (ftdi_res[rd_byte_pos] & 0x80) ? 1<<(bit_pos&7) : 0;
+	result[bit_pos/8] |= (ftdi_res[rd_byte_pos] & 0x80) ? (1<<(bit_pos & 7)) : 0;
 	bit_pos++;
 	rd_byte_pos++;
 	break;
       }
+    }
+    fprintf(stderr,"rd_len=%d rd_byte_pos=%d\n",rd_len,rd_byte_pos);
+    { int i;
+      for(i=0;i<rd_len;i++)
+	fprintf(stderr,"%2.2x,",(int)result[i]);
+      fprintf(stderr,"\n");	
     }
   }
   return 0;
