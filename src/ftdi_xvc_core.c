@@ -120,7 +120,7 @@ int ftdi_xvc_shift_command(unsigned int len,
         ftdi_cmd[3*i] = MPSSE_WRITE_TMS|MPSSE_DO_READ|MPSSE_LSB|MPSSE_BITMODE|MPSSE_WRITE_NEG;
         ftdi_cmd[3*i+1] = 0; //One bit - 0!
         ftdi_cmd[3*i+2] = 
-	   ((buffer[(pos+i)/8] & (1<<((pos+i) & 7))) ? 0x03 : 0x00) |
+	   ((buffer[(pos+i)/8] & (1<<((pos+i) & 7))) ? 0x01 : 0x00) |
            ((buffer[(pos+i)/8+nr_bytes] & (1<<((pos+i) & 7))) ? 0x80 : 0x00);
         }
      if (ftdi_write_data(&ftdi, ftdi_cmd, 3*to_send) != 3*to_send) {
