@@ -79,13 +79,15 @@ struct ftdi_context *ftdi_xvc_get_context()
 }
 
 /** \brief Initialize the MPSSE engine on the FTDI device. */
-int ftdi_xvc_init_mpsse() {
+int ftdi_xvc_init_mpsse(int isfasttck, int isdigilent) {
   int res;
   unsigned char byte;
 
   unsigned char buf[7] = {
-    SET_BITS_LOW, 0x08, 0x0B,  // Set TMS high, TCK/TDI/TMS as outputs.
-    TCK_DIVISOR, 0x01, 0x00,   // Set TCK clock rate = 6 MHz.
+	// Set TMS high, TCK/TDI/TMS as outputs, ADBUS7 output high if Digilent boards
+	SET_BITS_LOW, isdigilent ? 0x88 : 0x08, isdigilent ? 0x8B : 0x0B, 
+	// Set TCK clock rate = 6 MHz, or 30 MHz if fast TCK
+    TCK_DIVISOR, isfasttck ? 0x00 : 0x01, 0x00, 
     SEND_IMMEDIATE
   };   
   ftdi_set_bitmode(&ftdi, 0x0B, BITMODE_BITBANG);

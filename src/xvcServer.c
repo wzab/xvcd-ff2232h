@@ -33,6 +33,8 @@
 #define MAP_SIZE      0x10000
 
 static int verbose = 0;
+static int fasttck = 0;
+static int digilent = 0;
 
 static int sread(int fd, void *target, int len) {
   unsigned char *t = target;
@@ -125,13 +127,22 @@ int main(int argc, char **argv) {
 
   opterr = 0;
 
-  while ((c = getopt(argc, argv, "v")) != -1)
+  while ((c = getopt(argc, argv, "vfd")) != -1)
     switch (c) {
     case 'v':
       verbose = 1;
       break;
+	case 'f':
+	  fasttck = 1;
+	  break;
+	case 'd':
+	  digilent = 1;
+	  break;
     case '?':
-      fprintf(stderr, "usage: %s [-v]\n", *argv);
+      fprintf(stderr, "usage: %s [-vfd]\n", *argv);
+      fprintf(stderr, " -v\tverbose output\n");
+      fprintf(stderr, " -f\tuse higher TCK frequency\n");
+      fprintf(stderr, " -d\tpull up ADBUS7 pin for boards with Digilent Adept downloader\n");
       return 1;
     }
   ftdi_xvc_init(verbose);
@@ -140,7 +151,7 @@ int main(int argc, char **argv) {
     return 1;
   }
   
-  if (ftdi_xvc_init_mpsse() < 0) 
+  if (ftdi_xvc_init_mpsse(fasttck, digilent) < 0) 
     return 1;
 
   s = socket(AF_INET, SOCK_STREAM, 0);
