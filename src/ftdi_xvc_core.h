@@ -9,7 +9,7 @@ void ftdi_xvc_close_device();
 
 struct ftdi_context *ftdi_xvc_get_context();
 
-int ftdi_xvc_init_mpsse();
+int ftdi_xvc_init_mpsse(int isfasttck, int isdigilent);
 
 int ftdi_xvc_shift_command(unsigned int len,
 			   unsigned char *buffer,
